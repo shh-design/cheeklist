@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRIX | Sistema de Acceso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <!-- Efecto Matrix de fondo -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>MATRIX SYSTEM</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" id="nav-home" class="nav-link active">
+                    <i class="fas fa-home"></i> Inicio
+                </a>
+                <a href="#" id="nav-user" class="nav-link">
+                    <i class="fas fa-user"></i> Usuario
+                </a>
+                <a href="#" id="nav-admin" class="nav-link">
+                    <i class="fas fa-user-shield"></i> Admin
+                </a>
+                <a href="#" id="nav-payment" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i> Pagos
+                </a>
+            </nav>
+            
+            <div class="user-status">
+                <span id="current-user-display">No conectado</span>
+                <button id="logout-btn" class="btn-logout hidden">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main id="main-content">
+            <!-- Sección de inicio (login/register) -->
+            <section id="home-section" class="content-section active">
+                <div class="welcome-message">
+                    <h1><i class="fas fa-terminal"></i> Bienvenido al Sistema Matrix</h1>
+                    <p class="subtitle">Accede al futuro de las transacciones digitales</p>
+                </div>
+                
+                <div class="main-content">
+                    <div class="panel">
+                        <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
+                        <form id="register-form" class="auth-form">
+                            <div class="form-group">
+                                <label for="register-username">
+                                    <i class="fas fa-user"></i> Nombre de Usuario
+                                </label>
+                                <input type="text" id="register-username" class="form-control" required 
+                                       placeholder="Ingrese su usuario" minlength="3" maxlength="20">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-email">
+                                    <i class="fas fa-envelope"></i> Correo Electrónico
+                                </label>
+                                <input type="email" id="register-email" class="form-control" required 
+                                       placeholder="ejemplo@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">
+                                    <i class="fas fa-lock"></i> Contraseña
+                                </label>
+                                <input type="password" id="register-password" class="form-control" required 
+                                       placeholder="Mínimo 6 caracteres" minlength="6">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Crear Cuenta
+                            </button>
+                        </form>
+                        <div id="register-message" class="message hidden"></div>
+                    </div>
+                    
+                    <div class="panel">
+                        <h2><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</h2>
+                        <form id="login-form" class="auth-form">
+                            <div class="form-group">
+                                <label for="login-username">
+                                    <i class="fas fa-user"></i> Usuario
+                                </label>
+                                <input type="text" id="login-username" class="form-control" required 
+                                       placeholder="Ingrese su usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">
+                                    <i class="fas fa-lock"></i> Contraseña
+                                </label>
+                                <input type="password" id="login-password" class="form-control" required 
+                                       placeholder="Ingrese su contraseña">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-type">
+                                    <i class="fas fa-users"></i> Tipo de Acceso
+                                </label>
+                                <select id="login-type" class="form-control">
+                                    <option value="user">Usuario Normal</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Acceder al Sistema
+                            </button>
+                        </form>
+                        <div id="login-message" class="message hidden"></div>
+                    </div>
+                </div>
+                
+                <!-- Redes sociales -->
+                <div class="social-section">
+                    <h2><i class="fas fa-network-wired"></i> Únete a Nuestras Redes</h2>
+                    <div class="social-links">
+                        <a href="https://t.me/matrix_system" class="social-link" target="_blank">
+                            <div class="social-icon telegram">
+                                <i class="fab fa-telegram"></i>
+                            </div>
+                            <span class="social-text">Telegram</span>
+                            <span class="social-desc">Canal oficial</span>
+                        </a>
+                        <a href="https://discord.gg/matrix" class="social-link" target="_blank">
+                            <div class="social-icon discord">
+                                <i class="fab fa-discord"></i>
+                            </div>
+                            <span class="social-text">Discord</span>
+                            <span class="social-desc">Comunidad activa</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de usuario -->
+            <section id="user-section" class="content-section">
+                <div class="panel user-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-user-circle"></i> Panel de Usuario</h2>
+                        <div class="user-balance-display">
+                            <span class="balance-label">Balance Actual:</span>
+                            <span class="balance-amount">$<span id="user-balance">0.00</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="info-card">
+                            <i class="fas fa-id-card"></i>
+                            <div>
+                                <h3>Información Personal</h3>
+                                <p>Usuario: <strong id="user-name-display"></strong></p>
+                                <p>Email: <strong id="user-email-display"></strong></p>
+                                <p>ID: <code id="user-id-display"></code></p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <i class="fas fa-history"></i>
+                            <div>
+                                <h3>Actividad Reciente</h3>
+                                <p>Último acceso: <span id="last-login">Hoy</span></p>
+                                <p>Transacciones: <span id="transaction-count">0</span></p>
+                                <p>Estado: <span class="status-active">Activo</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Opciones de compra -->
+                    <div class="purchase-section">
+                        <h3><i class="fas fa-shopping-cart"></i> Opciones de Compra</h3>
+                        <div class="payment-options">
+                            <div class="payment-option" id="physical-book-option">
+                                <div class="payment-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <h4>Libro Físico "Matrix Code"</h4>
+                                <p class="payment-description">
+                                    Edición limitada con contenido exclusivo sobre programación y criptografía.
+                                </p>
+                                <div class="payment-details">
+                                    <span class="price">$49.99</span>
+                                    <span class="shipping">+ Envío $5.99</span>
+                                </div>
+                                <button class="btn btn-buy" data-product="book">
+                                    <i class="fas fa-cart-plus"></i> Comprar Ahora
+                                </button>
+                            </div>
+                            
+                            <div class="payment-option" id="crypto-option">
+                                <div class="payment-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <h4>Pago con Criptomonedas</h4>
+                                <p class="payment-description">
+                                    Paga con Bitcoin, Ethereum o USDT y recibe un 5% de descuento.
+                                </p>
+                                <div class="payment-details">
+                                    <span class="price">0.05 ETH</span>
+                                    <span class="discount">≈ $89.50 (-5%)</span>
+                                </div>
+                                <button class="btn btn-buy" data-product="crypto">
+                                    <i class="fas fa-qrcode"></i> Mostrar QR
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- QR Code Display -->
+                        <div id="qr-display-container" class="hidden">
+                            <div class="qr-display">
+                                <h4><i class="fas fa-qrcode"></i> Escanee para Pagar</h4>
+                                <div class="qr-code-placeholder" id="qr-code">
+                                    <!-- QR se generará aquí -->
+                                    <div class="qr-text">
+                                        <div>0x7a3Bc8...9f2C</div>
+                                        <div>ETH: 0.05</div>
+                                    </div>
+                                </div>
+                                <p class="qr-instructions">
+                                    Envíe exactamente 0.05 ETH a la dirección mostrada.
+                                    La transacción se confirmará automáticamente en 2-3 minutos.
+                                </p>
+                                <button id="close-qr" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de administrador -->
+            <section id="admin-section" class="content-section">
+                <div class="panel admin-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-user-shield"></i> Panel de Administración</h2>
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <span class="stat-number" id="total-users">0</span>
+                                    <span class="stat-label">Usuarios</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>
+                                    <span class="stat-number">$<span id="total-balance">0</span></span>
+                                    <span class="stat-label">Balance Total</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-exchange-alt"></i>
+                                <div>
+                                    <span class="stat-number" id="total-transactions">0</span>
+                                    <span class="stat-label">Transacciones</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gestión de usuarios -->
+                    <div class="user-management">
+                        <h3><i class="fas fa-user-cog"></i> Gestión de Usuarios</h3>
+                        <div class="table-container">
+                            <table id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-id-badge"></i> ID</th>
+                                        <th><i class="fas fa-user"></i> Usuario</th>
+                                        <th><i class="fas fa-envelope"></i> Email</th>
+                                        <th><i class="fas fa-wallet"></i> Balance</th>
+                                        <th><i class="fas fa-cogs"></i> Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <!-- Usuarios cargados dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Formulario para agregar/modificar balance -->
+                        <div class="balance-form">
+                            <h4><i class="fas fa-edit"></i> Modificar Balance</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="selected-user">Usuario:</label>
+                                    <select id="selected-user" class="form-control">
+                                        <option value="">Seleccione un usuario</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="balance-amount">Monto:</label>
+                                    <input type="number" id="balance-amount" class="form-control" 
+                                           placeholder="Ej: 100.50" step="0.01" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="balance-action">Acción:</label>
+                                    <select id="balance-action" class="form-control">
+                                        <option value="set">Establecer</option>
+                                        <option value="add">Agregar</option>
+                                        <option value="subtract">Restar</option>
+                                    </select>
+                                </div>
+                                <button id="update-balance-btn" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de procesamiento de pago -->
+            <section id="payment-section" class="content-section">
+                <div class="payment-process">
+                    <div class="process-header">
+                        <h2><i class="fas fa-credit-card"></i> Procesando Pago</h2>
+                        <div class="order-summary">
+                            <p>Producto: <span id="order-product">Libro Físico "Matrix Code"</span></p>
+                            <p>Total: <span class="order-total">$55.98</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pasos del proceso -->
+                    <div class="process-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <h4>Validación</h4>
+                                <p>Verificando información</p>
+                            </div>
+                            <i class="fas fa-check step-check hidden"></i>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <h4>Procesamiento</h4>
+                                <p>Procesando transacción</p>
+                            </div>
+                            <i class="fas fa-check step-check hidden"></i>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <h4>Confirmación</h4>
+                                <p>Confirmando pago</p>
+                            </div>
+                            <i class="fas fa-check step-check hidden"></i>
+                        </div>
+                        <div class="step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <h4>Completado</h4>
+                                <p>Finalizando proceso</p>
+                            </div>
+                            <i class="fas fa-check step-check hidden"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Barra de progreso -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progress-percentage">0%</span>
+                            <span id="progress-status">Iniciando...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalles del proceso -->
+                    <div class="process-details">
+                        <div class="detail-card">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <h4>Estado del Proceso</h4>
+                                <p id="process-status">Preparando transacción...</p>
+                                <p class="process-tip">
+                                    <i class="fas fa-lightbulb"></i> 
+                                    No cierre esta ventana durante el proceso.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-card hidden" id="crypto-details">
+                            <i class="fas fa-bitcoin"></i>
+                            <div>
+                                <h4>Información Crypto</h4>
+                                <p>Dirección: <code>0x7a3Bc8...9f2C</code></p>
+                                <p>Monto: <strong>0.05 ETH</strong></p>
+                                <p>Red: Ethereum Mainnet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de pago exitoso -->
+            <section id="success-section" class="content-section">
+                <div class="success-container">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>¡Pago Completado Exitosamente!</h2>
+                    <p class="success-message">
+                        Su transacción ha sido procesada y confirmada en la blockchain.
+                    </p>
+                    
+                    <div class="success-details">
+                        <div class="detail-row">
+                            <span>ID de Transacción:</span>
+                            <code id="transaction-id">TX-7834-ABCD-EFGH</code>
+                        </div>
+                        <div class="detail-row">
+                            <span>Monto:</span>
+                            <strong id="success-amount">$55.98</strong>
+                        </div>
+                        <div class="detail-row">
+                            <span>Producto:</span>
+                            <span id="success-product">Libro Físico "Matrix Code"</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Fecha:</span>
+                            <span id="success-date">9 Enero 2024, 14:30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="success-actions">
+                        <button id="back-to-dashboard" class="btn btn-primary">
+                            <i class="fas fa-tachometer-alt"></i> Volver al Panel
+                        </button>
+                        <button id="print-receipt" class="btn btn-secondary">
+                            <i class="fas fa-print"></i> Imprimir Recibo
+                        </button>
+                        <button id="new-purchase" class="btn btn-secondary">
+                            <i class="fas fa-shopping-cart"></i> Nueva Compra
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-code"></i> MATRIX SYSTEM</h4>
+                    <p>Sistema de gestión y pagos futurista</p>
+                    <p class="copyright">© 2024 Matrix System. Todos los derechos reservados.</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-link"></i> Enlaces Rápidos</h4>
+                    <a href="#"><i class="fas fa-question-circle"></i> Soporte</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> Términos</a>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacidad</a>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-envelope"></i> Contacto</h4>
+                    <p><i class="fas fa-envelope"></i> soporte@matrix-system.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="matrix-effect.js"></script>
+    <script src="script.js"></script>
+    <script src="user.js"></script>
+    <script src="admin.js"></script>
+    <script src="payment.js"></script>
+</body>
+</html>
